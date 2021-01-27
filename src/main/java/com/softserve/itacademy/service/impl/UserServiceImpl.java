@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-@Service
+@Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -21,42 +20,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(User user) {
-        try {
-            return userRepository.save(user);
-        } catch (IllegalArgumentException e) {
-            throw new NullEntityReferenceException("User cannot be 'null'");
+    public User create(User role) {
+        if (role != null) {
+            return userRepository.save(role);
         }
+        throw new NullEntityReferenceException("User cannot be 'null'");
     }
 
     @Override
     public User readById(long id) {
-        Optional<User> optional = userRepository.findById(id);
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-        throw new EntityNotFoundException("User with id " + id + " not found");
+        return userRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("User with id " + id + " not found"));
     }
 
     @Override
-    public User update(User user) {
-        if (user != null) {
-            User oldUser = readById(user.getId());
-            if (oldUser != null) {
-                return userRepository.save(user);
-            }
+    public User update(User role) {
+        if (role != null) {
+            readById(role.getId());
+            return userRepository.save(role);
         }
         throw new NullEntityReferenceException("User cannot be 'null'");
     }
 
     @Override
     public void delete(long id) {
-        User user = readById(id);
-        if (user != null) {
-            userRepository.delete(user);
-        } else {
-            throw new EntityNotFoundException("User with id " + id + " not found");
-        }
+        userRepository.delete(readById(id));
     }
 
     @Override
@@ -64,5 +52,4 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAll();
         return users.isEmpty() ? new ArrayList<>() : users;
     }
-
 }

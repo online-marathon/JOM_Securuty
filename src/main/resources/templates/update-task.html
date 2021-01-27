@@ -50,9 +50,7 @@
         <input type="hidden" name="id" th:value="*{id}">
         <input type="hidden" name="todoId" th:value="${task.todoId}">
     </form>
-<div>
-    <a th:href="@{|/todos/${task.todoId}/tasks|}">Go to Task List</a>
 </div>
-</div>
+<a th:href="@{|/todos/${task.todoId}/tasks|}">Go to Task List</a>
 </body>
 </html>

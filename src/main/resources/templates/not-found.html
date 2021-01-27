@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <title>Error Page</title>
+    <title>Not Found Page</title>
 </head>
 <body>
 <div th:replace="header"></div>
 <br>
-<h1 style="margin: 0 auto; width: max-content" th:text="${code}" />
-<h2 style="margin: 0 auto; width: max-content" th:text="${message}" />
+<h1 style="margin: 0 auto; width: max-content">404 / Not Found</h1>
+<h2 style="margin: 0 auto; width: max-content" th:text="${error}"></h2>
 </body>
 </html>
