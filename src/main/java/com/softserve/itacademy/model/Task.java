@@ -1,12 +1,17 @@
 package com.softserve.itacademy.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "tasks")
+@Getter
+@Setter
 public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -16,7 +21,7 @@ public class Task {
 
     @Column(name = "priority")
     @Enumerated(EnumType.STRING)
-    private Priority priority;
+    private TaskPriority priority;
 
     @ManyToOne
     @JoinColumn(name = "todo_id")
@@ -29,54 +34,27 @@ public class Task {
     public Task() {
     }
 
-    public long getId() {
-        return id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id && Objects.equals(name, task.name) && priority == task.priority && Objects.equals(todo, task.todo) && Objects.equals(state, task.state);
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Priority getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
-
-    public ToDo getTodo() {
-        return todo;
-    }
-
-    public void setTodo(ToDo todo) {
-        this.todo = todo;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, priority, todo, state);
     }
 
     @Override
     public String toString() {
-        return "Task {" +
+        return "Task { " +
                 "id = " + id +
                 ", name = '" + name + '\'' +
                 ", priority = " + priority +
                 ", todo = " + todo +
                 ", state = " + state +
-                "} ";
+                " }";
     }
 }
